@@ -9,6 +9,12 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install curl \
     && rm -rf /var/lib/apt/lists/*
 
+# Set the Apache document root to /var/www/html/public
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+
+# Update the Apache configuration to use the new document root
+RUN sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf /etc/apache2/apache2.conf
+
 # Enable Apache mod_rewrite for pretty URLs
 RUN a2enmod rewrite
 
